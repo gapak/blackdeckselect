@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import axios from 'axios';
 
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
@@ -63,6 +64,11 @@ class App extends Component {
       creative: _.random(2, 4),
 
       bonus: '',
+
+      cards: [],
+      response: null,
+
+      posted: false,
     };
 
 
@@ -75,7 +81,26 @@ class App extends Component {
 
     this.raise_skill = this.raise_skill.bind(this);
     this.lower_skill = this.lower_skill.bind(this);
+
+    this.postBuild = this.postBuild.bind(this);
   }
+
+
+  componentDidMount() {
+    this.updateList();
+  }
+
+  updateList() {
+    axios.get('/list')
+        .then(res => {
+          console.log(res);
+          //const posts = res.data.map(obj => obj.data);
+          const posts = res.data;
+          console.log(posts);
+          this.setState({ cards: posts });
+        });
+  }
+
 
   exprOptionChange(changeEvent) {
     this.setState({
@@ -97,7 +122,7 @@ class App extends Component {
   }
 
   skill_check() {
-    console.log(this.stats_sum(), this.calcSkillsSum(), this.state);
+    //console.log(this.stats_sum(), this.calcSkillsSum(), this.state);
     if (this.stats_sum() > this.calcSkillsSum()) {
       let difference = this.stats_sum() - this.calcSkillsSum();
 
@@ -195,6 +220,27 @@ class App extends Component {
     return this.state.design + this.state.engineering + this.state.creative;
   }
 
+  postBuild() {
+    let build = {
+      name: this.state.name,
+      expr: this.state.expr,
+      speed: this.state.speed,
+      team: this.state.team,
+      design: this.state.design,
+      engineering: this.state.engineering,
+      creative: this.state.creative,
+      bonus: this.state.bonus
+    };
+
+    axios.post('/add', build)
+        .then(res => {
+          console.log(res);
+          this.setState({ posted: true});
+          this.updateList();
+        });
+
+  }
+
 
   render() {
     const make_text = (name, key) =>
@@ -225,7 +271,7 @@ class App extends Component {
         <div className="container theme-showcase" role="main">
         <h3 className="App-title">Build your Hero</h3>
 
-        <form>
+        <div className="form">
 
           {make_text("Your name", "name")}
 
@@ -271,37 +317,46 @@ class App extends Component {
             {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
           </div>
 
-        </form>
-
-
-
-        <h4 className="App-title">Form Skills</h4>
-        <div>
-          Summ of your skills should be: {this.calcSkillsSum()} ({this.stats_sum()} used)
-        </div>
-        <div>
-          <div name = 'design'>
-            Design
-            <button onClick={() => {this.lower_skill('design')}}> {'<'} </button>
-            <span className="font-weight-bold"> {this.state.design} </span>
-            <button onClick={() => {this.raise_skill('design')}}> {'>'} </button>
-            {marks[this.state.design]}
+          <h4 className="App-title">Form Skills</h4>
+          <div>
+            Summ of your skills should be: {this.calcSkillsSum()} ({this.stats_sum()} used)
           </div>
-          <div name = 'engineering'>
-            Engineering
-            <button onClick={() => {this.lower_skill('engineering')}}> {'<'} </button>
-            <span className="font-weight-bold"> {this.state.engineering} </span>
-            <button onClick={() => {this.raise_skill('engineering')}}> {'>'} </button>
-            {marks[this.state.engineering]}
+          <div>
+            <div name = 'design'>
+              Design
+              <button onClick={() => {this.lower_skill('design')}}> {'<'} </button>
+              <span className="font-weight-bold"> {this.state.design} </span>
+              <button onClick={() => {this.raise_skill('design')}}> {'>'} </button>
+              {marks[this.state.design]}
+            </div>
+            <div name = 'engineering'>
+              Engineering
+              <button onClick={() => {this.lower_skill('engineering')}}> {'<'} </button>
+              <span className="font-weight-bold"> {this.state.engineering} </span>
+              <button onClick={() => {this.raise_skill('engineering')}}> {'>'} </button>
+              {marks[this.state.engineering]}
+            </div>
+            <div name = 'creative'>
+              Creative
+              <button onClick={() => {this.lower_skill('creative')}}> {'<'} </button>
+              <span className="font-weight-bold"> {this.state.creative} </span>
+              <button onClick={() => {this.raise_skill('creative')}}> {'>'} </button>
+              {marks[this.state.creative]}
+            </div>
           </div>
-          <div name = 'creative'>
-            Creative
-            <button onClick={() => {this.lower_skill('creative')}}> {'<'} </button>
-            <span className="font-weight-bold"> {this.state.creative} </span>
-            <button onClick={() => {this.raise_skill('creative')}}> {'>'} </button>
-            {marks[this.state.creative]}
+
+          <div>
+            {this.state.posted ?
+                <button className="btn btn-info"> Posted! </button> :
+                <button className="btn btn-success" onClick={() => { this.postBuild(); }}> Post build! </button>}
           </div>
-        </div>
+
+          </div>
+
+          <div>
+            <h4 className="App-title">Resent builds:</h4>
+            {JSON.stringify(this.state.cards)}
+          </div>
 
         </div>
       </div>
