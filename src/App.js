@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import './App.css';
 
 const bonuses = {
   junior: [
@@ -283,7 +284,7 @@ class App extends Component {
 
           <h4 className="App-title">Select experience</h4>
 
-          <div name = 'expr'>
+          <div className="datablock" name = 'expr'>
             Choose your experience:
             {make_radio("expr", "junior", this.exprOptionChange, "Junior — you can work only with small projects")}
             {make_radio("expr", "specialist", this.exprOptionChange, "Specialist — you can work with small amd medium projects")}
@@ -303,25 +304,27 @@ class App extends Component {
 
           <h4 className="App-title">Choose perks</h4>
 
-          <div name = 'speed'>
-            Choose your workspeed:
-            {make_radio("speed", "slow", this.speedOptionChange, "Slow — your workspeed halved")}
-            {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
-            {make_radio("speed", "fast", this.speedOptionChange, "Fast — your wokrspeed is 1.5 faster")}
-          </div>
+          <div className="flex-container-row">
+            <div className="datablock flex-element" name = 'speed'>
+              Choose your workspeed:
+              {make_radio("speed", "slow", this.speedOptionChange, "Slow — your workspeed halved")}
+              {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
+              {make_radio("speed", "fast", this.speedOptionChange, "Fast — your wokrspeed is 1.5 faster")}
+            </div>
 
-          <div name = 'team'>
-            Choose your communication skills:
-            {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
-            {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
-            {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
+            <div className="datablock flex-element" name = 'team'>
+              Choose your communication skills:
+              {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
+              {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
+              {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
+            </div>
           </div>
 
           <h4 className="App-title">Form Skills</h4>
           <div>
             Summ of your skills should be: {this.calcSkillsSum()} ({this.stats_sum()} used)
           </div>
-          <div>
+          <div className="datablock">
             <div name = 'design'>
               Design
               <button onClick={() => {this.lower_skill('design')}}> {'<'} </button>
