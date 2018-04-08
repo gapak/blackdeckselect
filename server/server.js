@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const path = require('path');
 
 const app = express();
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -19,7 +19,6 @@ app.get('/ping', function (req, res) {
 });
 
 app.post('/add', function (req, res) {
-    console.log(req.body);
     console.log(req.body);
     db.collection('black_deck_card').insert(req.body, (err, result) => {
         if (err) return console.log(err);
@@ -39,6 +38,7 @@ app.get('/list', function (req, res) {
 
 
 app.get('/', function (req, res) {
+    console.log('prixying');
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
