@@ -8,37 +8,37 @@ import './App.css';
 
 const bonuses = {
   junior: [
-    {value: 'j1', label: 'Если работает в команде, то может работать над средними проектами.'},
-    {value: 'j2', label: 'Если работает в одиночку, то может работать над средними проектами.'},
-    {value: 'j3', label: 'Если работает в команде, то скорость возрастает'},
-    {value: 'j4', label: 'Если работает в одиночку, то скорость возрастает'}
+    {value: 'j1', label: 'Able to work on medium projects when works in a team.'},
+    {value: 'j2', label: 'Able to work on medium projects when works alone.'},
+    {value: 'j3', label: 'Speed increases when works in a team'},
+    {value: 'j4', label: 'Speed increases when works alone'}
   ],
   specialist: [
-    {value: 's1', label: 'Все члены вашей команды получают +1 к дизайну.'},
-    {value: 's2', label: 'Все члены вашей команды получают +1 к инжинирингу.'},
-    {value: 's3', label: 'Все члены вашей команды получают +1 к креативу.'}
+    {value: 's1', label: 'All members of your team get +1 to design.'},
+    {value: 's2', label: 'All members of your team get +1 to engineering.'},
+    {value: 's3', label: 'All members of your team get +1 to creative.'}
   ],
   expert: [
-    {value: 'e1', label: 'Если работает в команде, то скорость падает'},
-    {value: 'e2', label: 'Если работает в одиночку, то скорость падает'},
-    {value: 'e3', label: 'После окончания вами проекта положите этого члена команды вниз библиотеки.'},
-    {value: 'e4', label: 'После окончания опонентом проекта положите этого члена команды вниз библиотеки.'},
-    {value: 'e5', label: 'Каждый ход в начале хода киньте кубик. Если выпало 1 — положите этого члена команды вниз библиотеки.'},
-    {value: 'e6', label: 'Каждый ход в конце хода киньте кубик. Если выпало 1 — положите этого члена команды вниз библиотеки.'}
+    {value: 'e1', label: 'Speed is slowing down when works in a team.'},
+    {value: 'e2', label: 'Speed is slowing down when works alone.'},
+    {value: 'e3', label: 'Put this team member down the library after you finish the project.'},
+    {value: 'e4', label: 'Put this team member down the library after an opponent finishes the project.'},
+    {value: 'e5', label: 'At the beginning of each turn roll the cube. If dropped 1 - put this team member down the library.'},
+    {value: 'e6', label: 'At the end of each turn roll the cube. If dropped 1 - put this team member down the library.'}
   ],
 };
 
 const marks = [
   '0',
-  'Абсолютный бездарь',
-  'Отдаленное понимание',
-  'Любительское понимание',
-  'Молодой специалист',
-  'Специалист',
-  'Опытный специалист',
-  'Уверенный профессионал',
-  'Исключительный профессионал',
-  'Признанный гуру'
+  'Absolute incompetent',
+  'Slightly understand',
+  'Dilettante understanding',
+  'Young specialist',
+  'Specialist',
+  'Experienced specialist',
+  'Confident professional',
+  'Exceptional professional',
+  'Recognized guru'
 ];
 
 class App extends Component {
