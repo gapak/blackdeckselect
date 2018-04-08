@@ -170,73 +170,74 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1 className="App-title">Build your Hero</h1>
+          <div className="container theme-showcase" role="main">
+          <h1 className="App-title">Build your Hero</h1>
 
-        <form>
+          <form>
 
-          {make_text("Your name", "name")}
+            {make_text("Your name", "name")}
 
-          <div name = 'setup'>
-          <h3 className="App-title">Setup const</h3>
-          {make_text("Mid_bonus", "mid_bonus")}
-          {make_text("Low_bonus", "low_bonus")}
+            <div name = 'setup' style={{display: 'none'}}>
+            <h3 className="App-title">Setup const</h3>
+            {make_text("Mid_bonus", "mid_bonus")}
+            {make_text("Low_bonus", "low_bonus")}
+            </div>
+
+
+            <h3 className="App-title">Choose perks</h3>
+            <div name = 'expr'>
+              Choose your experience:
+              {make_radio("expr", "junior", this.exprOptionChange, "Junior - you can work only with small projects")}
+              {make_radio("expr", "specialist", this.exprOptionChange, "Specialist - you can work with small amd medium projects")}
+              {make_radio("expr", "expert", this.exprOptionChange, "Expert - you can work with projects of any size (even big)")}
+            </div>
+
+            <div name = 'speed'>
+              Choose your workspeed:
+              {make_radio("speed", "slow", this.speedOptionChange, "Slow - your workspeed halved")}
+              {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
+              {make_radio("speed", "fast", this.speedOptionChange, "Fast - your wokrspeed is 1.5 faster")}
+            </div>
+
+            <div name = 'team'>
+              Choose your communication skills:
+              {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
+              {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
+              {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
+            </div>
+
+          </form>
+
+
+
+          <h3 className="App-title">Form Skills</h3>
+          <div>
+            Summ of your skills should be: {Math.floor(this.calcSkillsSum())} ({this.calcSkillsSum()})
           </div>
-
-
-          <h3 className="App-title">Choose perks</h3>
-          <div name = 'expr'>
-            Choose your experience:
-            {make_radio("expr", "junior", this.exprOptionChange, "Junior - you can work only with small projects")}
-            {make_radio("expr", "specialist", this.exprOptionChange, "Specialist - you can work with small amd medium projects")}
-            {make_radio("expr", "expert", this.exprOptionChange, "Expert - you can work with projects of any size")}
+          <div>
+            <div name = 'design'>
+              Design
+              <button onClick={() => {this.lower_skill('design')}}> {'<'} </button>
+              <span> {this.state.design} </span>
+              <button onClick={() => {this.raise_skill('design')}}> {'>'} </button>
+              {marks[this.state.design]}
+            </div>
+            <div name = 'engineering'>
+              Engineering
+              <button onClick={() => {this.lower_skill('engineering')}}> {'<'} </button>
+              <span> {this.state.engineering} </span>
+              <button onClick={() => {this.raise_skill('engineering')}}> {'>'} </button>
+              {marks[this.state.engineering]}
+            </div>
+            <div name = 'creative'>
+              Creative
+              <button onClick={() => {this.lower_skill('creative')}}> {'<'} </button>
+              <span> {this.state.creative} </span>
+              <button onClick={() => {this.raise_skill('creative')}}> {'>'} </button>
+              {marks[this.state.creative]}
+            </div>
           </div>
-
-          <div name = 'speed'>
-            Choose your workspeed:
-            {make_radio("speed", "slow", this.speedOptionChange, "Slow - your workspeed halved")}
-            {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
-            {make_radio("speed", "fast", this.speedOptionChange, "Fast - your wokrspeed is 1.5 faster")}
           </div>
-
-          <div name = 'team'>
-            Choose your communication skills:
-            {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
-            {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
-            {make_radio("team", "leader", this.teamOptionChange, "You can work in team")}
-          </div>
-
-        </form>
-
-
-
-        <h3 className="App-title">Form Skills</h3>
-        <div>
-          Summ of your skills should be: {Math.floor(this.calcSkillsSum())} ({this.calcSkillsSum()})
-        </div>
-        <div>
-          <div name = 'design'>
-            Design
-            <button onClick={() => {this.lower_skill('design')}}> {'<'} </button>
-            <span> {this.state.design} </span>
-            <button onClick={() => {this.raise_skill('design')}}> {'>'} </button>
-            {marks[this.state.design]}
-          </div>
-          <div name = 'engineering'>
-            Engineering
-            <button onClick={() => {this.lower_skill('engineering')}}> {'<'} </button>
-            <span> {this.state.engineering} </span>
-            <button onClick={() => {this.raise_skill('engineering')}}> {'>'} </button>
-            {marks[this.state.engineering]}
-          </div>
-          <div name = 'creative'>
-            Creative
-            <button onClick={() => {this.lower_skill('creative')}}> {'<'} </button>
-            <span> {this.state.creative} </span>
-            <button onClick={() => {this.raise_skill('creative')}}> {'>'} </button>
-            {marks[this.state.creative]}
-          </div>
-        </div>
-
       </div>
     );
   }
