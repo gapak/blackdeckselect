@@ -96,7 +96,7 @@ class App extends Component {
         .then(res => {
           console.log(res);
           //const posts = res.data.map(obj => obj.data);
-          const posts = res.data;
+          const posts = _.reverse(res.data);
           console.log(posts);
           this.setState({ cards: posts });
         });
@@ -230,7 +230,7 @@ class App extends Component {
       design: this.state.design,
       engineering: this.state.engineering,
       creative: this.state.creative,
-      bonus: this.state.bonus
+      bonus: this.state.bonus.label
     };
 
     axios.post('/add', build)
@@ -358,7 +358,37 @@ class App extends Component {
 
           <div>
             <h4 className="App-title">Resent builds:</h4>
-            {JSON.stringify(this.state.cards)}
+
+            <table className="table">
+              <thead>
+              <tr key='head'>
+                <td>Name</td>
+                <td>Expr</td>
+                <td>Speed</td>
+                <td>Team</td>
+                <td>Design</td>
+                <td>Engineering</td>
+                <td>Creative</td>
+                <td>Bonus</td>
+              </tr>
+              </thead>
+              <tbody>
+              {this.state.cards.map((row) =>
+                  <tr key={row._id} >
+                    <td>{row.name}</td>
+                    <td>{row.expr}</td>
+                    <td>{row.speed}</td>
+                    <td>{row.team}</td>
+                    <td>{row.design}</td>
+                    <td>{row.engineering}</td>
+                    <td>{row.creative}</td>
+                    <td>
+                      <img src="hand.png" width={32} height={24} title={row.bonus} alt="hower" />
+                    </td>
+                  </tr>
+              )}
+              </tbody>
+            </table>
           </div>
 
         </div>
