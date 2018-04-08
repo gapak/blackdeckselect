@@ -79,13 +79,13 @@ class App extends Component {
 
     switch (this.state.expr) {
       case 'junior':
-        base *= this.state.high_bonus;
+        base *= this.state.low_bonus;
         break;
       case 'specialist':
         base *= this.state.mid_bonus;
         break;
       case 'expert':
-        base *= this.state.low_bonus;
+        base *= this.state.high_bonus;
         break;
       default:
         console.log('error case: ' + this.state.expr);
