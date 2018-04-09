@@ -67,21 +67,15 @@ class App extends Component {
       bonus: '',
 
       cards: [],
-      response: null,
 
       posted: false,
     };
 
-
-    this.exprOptionChange = this.exprOptionChange.bind(this);
-    this.speedOptionChange = this.speedOptionChange.bind(this);
-    this.teamOptionChange = this.teamOptionChange.bind(this);
-    this.bonusOptionChange = this.bonusOptionChange.bind(this);
-
+    this.customOptionChange = this.customOptionChange.bind(this);
     this.calcSkillsSum = this.calcSkillsSum.bind(this);
 
-    this.raise_skill = this.raise_skill.bind(this);
-    this.lower_skill = this.lower_skill.bind(this);
+    this.raise_stat = this.raise_stat.bind(this);
+    this.lower_stat = this.lower_stat.bind(this);
 
     this.postBuild = this.postBuild.bind(this);
   }
@@ -95,31 +89,17 @@ class App extends Component {
     axios.get('/list')
         .then(res => {
           console.log(res);
-          //const posts = res.data.map(obj => obj.data);
           const posts = _.reverse(res.data);
           console.log(posts);
           this.setState({ cards: posts });
         });
   }
 
-
-  exprOptionChange(changeEvent) {
-    this.setState({
-      expr: changeEvent.target.value,
-      bonus: ''
-    }, () => this.skill_check() );
-  }
-
-  speedOptionChange(changeEvent) {
-    this.setState({
-      speed: changeEvent.target.value
-    }, () => this.skill_check() );
-  }
-
-  teamOptionChange(changeEvent) {
-    this.setState({
-      team: changeEvent.target.value
-    }, () => this.skill_check() );
+  customOptionChange(event, key) {
+    console.log(key, event.target.value, event);
+    let o = {};
+    o[key] = event.target.value;
+    this.setState(o, () => this.skill_check() );
   }
 
   skill_check() {
@@ -137,19 +117,8 @@ class App extends Component {
         if (this.state.creative >= this.state.engineering || this.state.creative >= this.state.design ) {
           this.lower_skill('creative');
         }
-      };
-
+      }
     }
-  }
-
-  bonusOptionChange(changeEvent) {
-
-    //this.setState({ changeEvent });
-    console.log(`Selected: ${changeEvent.label}`);
-
-    this.setState({
-      bonus: changeEvent
-    });
   }
 
   calcSkillsSum() {
@@ -197,11 +166,10 @@ class App extends Component {
         console.log('error case: ' + this.state.team);
     }
 
-
     return Math.floor(base);
   }
 
-  raise_skill(skill) {
+  raise_stat(skill) {
     if (this.state[skill] < 9 && this.stats_sum() < this.calcSkillsSum() ) {
       let o = {};
       o[skill] = this.state[skill] + 1;
@@ -209,7 +177,7 @@ class App extends Component {
     }
   }
 
-  lower_skill(skill) {
+  lower_stat(skill) {
     if (this.state[skill] > 1) {
       let o = {};
       o[skill] = this.state[skill] - 1;
@@ -244,35 +212,35 @@ class App extends Component {
 
 
   render() {
-    const make_text = (name, key) =>
+    const make_text = (stat, name) =>
       <div className="text">
         {name} <input type="text" name="key" className="form-inline"
-                          value={this.state[key]}
+                          value={this.state[stat]}
                           onChange={(event) => {
                             let o = {};
-                            o[key] = event.target.value;
+                            o[stat] = event.target.value;
                             this.setState(o)
                           }}
       />
       </div>;
 
-    const make_radio = (type, key, callback, text) =>
+    const make_radio = (stat, key, text) =>
       <div className="radio">
         <label>
           <input type="radio" value={key}
-                 checked={(() => { return this.state[type] === key; })()}
-                 onChange={callback} />
+                 checked={(() => { return this.state[stat] === key; })()}
+                 onChange={(changeEvent) =>  { this.customOptionChange(changeEvent, stat); }} />
           {text}
         </label>
       </div>;
 
-    const make_arrows = (name, key, low_callback, rise_callback) =>
-      <div name = {key}>
+    const make_arrows = (stat, name) =>
+      <div name = {stat}>
         {name}
-        <button onClick={() => {low_callback(key)}}> {'<'} </button>
-        <span className="font-weight-bold"> {this.state[key]} </span>
-        <button onClick={() => {rise_callback(key)}}> {'>'} </button>
-        {marks[this.state[key]]}
+        <button onClick={() => {this.lower_stat(stat)}}> {'<'} </button>
+        <span className="font-weight-bold"> {this.state[stat]} </span>
+        <button onClick={() => {this.raise_stat(stat)}}> {'>'} </button>
+        {marks[this.state[stat]]}
       </div>;
 
 
@@ -282,20 +250,20 @@ class App extends Component {
           <h3 className="App-title">Build your Hero</h3>
           <div className="form">
 
-            {make_text("Your name", "name")}
+            {make_text("name", "Your name")}
 
             <div name = 'setup' style={{display: 'none'}}>
             <h3 className="App-title">Setup const</h3>
-            {make_text("Mid_bonus", "mid_bonus")}
-            {make_text("Low_bonus", "low_bonus")}
+            {make_text("mid_bonus", "Mid_bonus")}
+            {make_text("low_bonus", "Low_bonus")}
             </div>
 
             <h4 className="App-title">Select experience</h4>
             <div className="datablock" name = 'expr'>
               Choose your experience:
-              {make_radio("expr", "junior", this.exprOptionChange, "Junior — you can work only with small projects")}
-              {make_radio("expr", "specialist", this.exprOptionChange, "Specialist — you can work with small amd medium projects")}
-              {make_radio("expr", "expert", this.exprOptionChange, "Expert — you can work with projects of any size (even big)")}
+              {make_radio("expr", "junior", "Junior — you can work only with small projects")}
+              {make_radio("expr", "specialist", "Specialist — you can work with small amd medium projects")}
+              {make_radio("expr", "expert", "Expert — you can work with projects of any size (even big)")}
             </div>
 
 
@@ -313,16 +281,16 @@ class App extends Component {
             <div className="flex-container-row">
               <div className="datablock flex-element" name = 'speed'>
                 Choose your workspeed:
-                {make_radio("speed", "slow", this.speedOptionChange, "Slow — your workspeed halved")}
-                {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
-                {make_radio("speed", "fast", this.speedOptionChange, "Fast — your wokrspeed is 1.5 faster")}
+                {make_radio("speed", "slow", "Slow — your workspeed halved")}
+                {make_radio("speed", "normal", "Normal workspeed")}
+                {make_radio("speed", "fast", "Fast — your wokrspeed is 1.5 faster")}
               </div>
 
               <div className="datablock flex-element" name = 'team'>
                 Choose your communication skills:
-                {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
-                {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
-                {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
+                {make_radio("team", "alone", "You can work only alone")}
+                {make_radio("team", "teamplayer", "You can work with a partner")}
+                {make_radio("team", "leader", "You can work with a team")}
               </div>
             </div>
 
@@ -331,9 +299,9 @@ class App extends Component {
               Summ of your skills should be: {this.calcSkillsSum()} ({this.stats_sum()} used)
             </div>
             <div className="datablock">
-              {make_arrows("Design", "design", this.lower_skill, this.raise_skill)}
-              {make_arrows("Engineering", "engineering", this.lower_skill, this.raise_skill)}
-              {make_arrows("Creative", "creative", this.lower_skill, this.raise_skill)}
+              {make_arrows("design", "Design")}
+              {make_arrows("engineering", "Engineering")}
+              {make_arrows("creative", "Creative")}
             </div>
 
             <div>
