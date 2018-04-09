@@ -95,10 +95,11 @@ class App extends Component {
         });
   }
 
-  customOptionChange(event, key) {
-    console.log(key, event.target.value, event);
+  customOptionChange(event, key, unpack = true) {
+    console.log(event);
+    console.log(key, unpack ? event.target.value : event);
     let o = {};
-    o[key] = event.target.value;
+    o[key] = unpack ? event.target.value : event;
     this.setState(o, () => this.skill_check() );
   }
 
@@ -214,13 +215,14 @@ class App extends Component {
   render() {
     const make_text = (stat, name) =>
       <div className="text">
-        {name} <input type="text" name="key" className="form-inline"
-                          value={this.state[stat]}
-                          onChange={(event) => {
-                            let o = {};
-                            o[stat] = event.target.value;
-                            this.setState(o)
-                          }}
+        {name}
+        <input type="text" name="key" className="form-inline"
+          value={this.state[stat]}
+          onChange={(event) => {
+            let o = {};
+            o[stat] = event.target.value;
+            this.setState(o)
+          }}
       />
       </div>;
 
@@ -242,6 +244,16 @@ class App extends Component {
         <button onClick={() => {this.raise_stat(stat)}}> {'>'} </button>
         {marks[this.state[stat]]}
       </div>;
+
+    const make_select = (stat, options) =>
+        <div className={stat}>
+          <Select
+            name="form-field-name"
+            value={this.state[stat]}
+            onChange={(changeEvent) =>  { this.customOptionChange(changeEvent, stat, false); }}
+            options={options}
+          />
+        </div>;
 
 
     return (
@@ -269,12 +281,7 @@ class App extends Component {
 
             <div className="bonus">
               <h4 className="App-title">Select feature</h4>
-              <Select
-                  name="form-field-name"
-                  value={this.state.bonus}
-                  onChange={this.bonusOptionChange}
-                  options={bonuses[this.state.expr]}
-              />
+              {make_select('bonus', bonuses[this.state.expr])}
             </div>
 
             <h4 className="App-title">Choose perks</h4>
