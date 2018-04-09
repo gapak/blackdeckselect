@@ -245,16 +245,16 @@ class App extends Component {
 
   render() {
     const make_text = (name, key) =>
-        <div className="text">
-          {name} <input type="text" name="key" className="form-inline"
-                            value={this.state[key]}
-                            onChange={(event) => {
-                              let o = {};
-                              o[key] = event.target.value;
-                              this.setState(o)
-                            }}
-        />
-        </div>
+      <div className="text">
+        {name} <input type="text" name="key" className="form-inline"
+                          value={this.state[key]}
+                          onChange={(event) => {
+                            let o = {};
+                            o[key] = event.target.value;
+                            this.setState(o)
+                          }}
+      />
+      </div>;
 
     const make_radio = (type, key, callback, text) =>
       <div className="radio">
@@ -264,101 +264,87 @@ class App extends Component {
                  onChange={callback} />
           {text}
         </label>
-      </div>
+      </div>;
+
+    const make_arrows = (name, key, low_callback, rise_callback) =>
+      <div name = {key}>
+        {name}
+        <button onClick={() => {low_callback(key)}}> {'<'} </button>
+        <span className="font-weight-bold"> {this.state[key]} </span>
+        <button onClick={() => {rise_callback(key)}}> {'>'} </button>
+        {marks[this.state[key]]}
+      </div>;
 
 
     return (
       <div className="App">
         <div className="container theme-showcase" role="main">
-        <h3 className="App-title">Build your Hero</h3>
+          <h3 className="App-title">Build your Hero</h3>
+          <div className="form">
 
-        <div className="form">
+            {make_text("Your name", "name")}
 
-          {make_text("Your name", "name")}
-
-          <div name = 'setup' style={{display: 'none'}}>
-          <h3 className="App-title">Setup const</h3>
-          {make_text("Mid_bonus", "mid_bonus")}
-          {make_text("Low_bonus", "low_bonus")}
-          </div>
-
-          <h4 className="App-title">Select experience</h4>
-
-          <div className="datablock" name = 'expr'>
-            Choose your experience:
-            {make_radio("expr", "junior", this.exprOptionChange, "Junior — you can work only with small projects")}
-            {make_radio("expr", "specialist", this.exprOptionChange, "Specialist — you can work with small amd medium projects")}
-            {make_radio("expr", "expert", this.exprOptionChange, "Expert — you can work with projects of any size (even big)")}
-          </div>
-
-
-          <div className="bonus">
-            <h4 className="App-title">Select feature</h4>
-            <Select
-                name="form-field-name"
-                value={this.state.bonus}
-                onChange={this.bonusOptionChange}
-                options={bonuses[this.state.expr]}
-            />
-          </div>
-
-          <h4 className="App-title">Choose perks</h4>
-
-          <div className="flex-container-row">
-            <div className="datablock flex-element" name = 'speed'>
-              Choose your workspeed:
-              {make_radio("speed", "slow", this.speedOptionChange, "Slow — your workspeed halved")}
-              {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
-              {make_radio("speed", "fast", this.speedOptionChange, "Fast — your wokrspeed is 1.5 faster")}
+            <div name = 'setup' style={{display: 'none'}}>
+            <h3 className="App-title">Setup const</h3>
+            {make_text("Mid_bonus", "mid_bonus")}
+            {make_text("Low_bonus", "low_bonus")}
             </div>
 
-            <div className="datablock flex-element" name = 'team'>
-              Choose your communication skills:
-              {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
-              {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
-              {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
+            <h4 className="App-title">Select experience</h4>
+            <div className="datablock" name = 'expr'>
+              Choose your experience:
+              {make_radio("expr", "junior", this.exprOptionChange, "Junior — you can work only with small projects")}
+              {make_radio("expr", "specialist", this.exprOptionChange, "Specialist — you can work with small amd medium projects")}
+              {make_radio("expr", "expert", this.exprOptionChange, "Expert — you can work with projects of any size (even big)")}
             </div>
-          </div>
 
-          <h4 className="App-title">Form Skills</h4>
-          <div>
-            Summ of your skills should be: {this.calcSkillsSum()} ({this.stats_sum()} used)
-          </div>
-          <div className="datablock">
-            <div name = 'design'>
-              Design
-              <button onClick={() => {this.lower_skill('design')}}> {'<'} </button>
-              <span className="font-weight-bold"> {this.state.design} </span>
-              <button onClick={() => {this.raise_skill('design')}}> {'>'} </button>
-              {marks[this.state.design]}
-            </div>
-            <div name = 'engineering'>
-              Engineering
-              <button onClick={() => {this.lower_skill('engineering')}}> {'<'} </button>
-              <span className="font-weight-bold"> {this.state.engineering} </span>
-              <button onClick={() => {this.raise_skill('engineering')}}> {'>'} </button>
-              {marks[this.state.engineering]}
-            </div>
-            <div name = 'creative'>
-              Creative
-              <button onClick={() => {this.lower_skill('creative')}}> {'<'} </button>
-              <span className="font-weight-bold"> {this.state.creative} </span>
-              <button onClick={() => {this.raise_skill('creative')}}> {'>'} </button>
-              {marks[this.state.creative]}
-            </div>
-          </div>
 
-          <div>
-            {this.state.posted ?
-                <button className="btn btn-info"> Posted! </button> :
-                <button className="btn btn-success" onClick={() => { this.postBuild(); }}> Post build! </button>}
-          </div>
+            <div className="bonus">
+              <h4 className="App-title">Select feature</h4>
+              <Select
+                  name="form-field-name"
+                  value={this.state.bonus}
+                  onChange={this.bonusOptionChange}
+                  options={bonuses[this.state.expr]}
+              />
+            </div>
 
+            <h4 className="App-title">Choose perks</h4>
+            <div className="flex-container-row">
+              <div className="datablock flex-element" name = 'speed'>
+                Choose your workspeed:
+                {make_radio("speed", "slow", this.speedOptionChange, "Slow — your workspeed halved")}
+                {make_radio("speed", "normal", this.speedOptionChange, "Normal workspeed")}
+                {make_radio("speed", "fast", this.speedOptionChange, "Fast — your wokrspeed is 1.5 faster")}
+              </div>
+
+              <div className="datablock flex-element" name = 'team'>
+                Choose your communication skills:
+                {make_radio("team", "alone", this.teamOptionChange, "You can work only alone")}
+                {make_radio("team", "teamplayer", this.teamOptionChange, "You can work with a partner")}
+                {make_radio("team", "leader", this.teamOptionChange, "You can work with a team")}
+              </div>
+            </div>
+
+            <h4 className="App-title">Form Skills</h4>
+            <div>
+              Summ of your skills should be: {this.calcSkillsSum()} ({this.stats_sum()} used)
+            </div>
+            <div className="datablock">
+              {make_arrows("Design", "design", this.lower_skill, this.raise_skill)}
+              {make_arrows("Engineering", "engineering", this.lower_skill, this.raise_skill)}
+              {make_arrows("Creative", "creative", this.lower_skill, this.raise_skill)}
+            </div>
+
+            <div>
+              {this.state.posted ?
+                  <button className="btn btn-info"> Posted! </button> :
+                  <button className="btn btn-success" onClick={() => { this.postBuild(); }}> Post build! </button>}
+            </div>
           </div>
 
           <div>
             <h4 className="App-title">Resent builds:</h4>
-
             <table className="table">
               <thead>
               <tr key='head'>
